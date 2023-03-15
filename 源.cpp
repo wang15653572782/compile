@@ -25,6 +25,20 @@ bool is_other(char ch) {
 	if (is_num(ch) || is_letter(ch))return false;
 	return true;
 }
+bool is_delimiter(char ch) {
+	char word[] = { '+','-','*','/','(',')',';','[',']','=','<' };
+	for (auto x : word) {
+		if (x == ch)return true;
+	}
+	return false;
+}
+bool judge(char ch) {
+	char word[] = { '+','-','*','/','(',')',';','[',']','=','<',':','{','.',',',' ','\n','\t'};
+	for (auto x : word) {
+		if (x == ch)return true;
+	}
+	return false;
+}
 void printToken(PSS& token1) {
 	int line = token1.first;
 	auto item = token1.second;
@@ -50,7 +64,11 @@ bool getTokenlist(FILE* fp)//取得当前行所有的token序列
 			if (cp == '\n')line++;
 			cp = fgetc(fp);
 		}//去掉所有的空格，制表符，换行符
-		
+		if (!is_letter(cp) && !is_num(cp) && !judge(cp)&&cp!=EOF) {
+			cout<< line << ":错误，无法以'"<<cp<<"'字符开头，请规范代码" <<"\n"<< endl;
+
+			return false;
+		}
 		if (is_letter(cp)) {//字母
 			string val;
 			while (is_letter(cp) || is_num(cp)) {
@@ -85,8 +103,7 @@ bool getTokenlist(FILE* fp)//取得当前行所有的token序列
 			//printToken(ans);
 			token.push_back(ans);
 		}
-			if (cp == '+' || cp == '-' || cp == '*' || cp == '/' || cp == '(' ||
-				cp == ')' || cp == ';' || cp == '[' || cp == ']' || cp == '=' || cp == '<') {//分界符
+			if (is_delimiter(cp)) {//分界符
 				string tmp;
 				tmp += cp;
 				PSS a_token = { line,{ "单分界符",tmp } };
@@ -162,7 +179,7 @@ bool getTokenlist(FILE* fp)//取得当前行所有的token序列
 					return false;
 				}
 			}
-			//else return false;
+			
 			cp = fgetc(fp);
 		}
 	return true;
@@ -174,15 +191,6 @@ void printTokenlist(vector<PSS>& to) {
 		printToken(*a);
 	}
 }//显示词法分析的结果
-void ChainToFile(vector<PSS>& Chainhead);//将链表中的Token存入文件 
-//enum state { 0, 1, 2, 3, 4, 5 };//dfa的所有状态 
-//enum letter { 'a'..'Z' };//字母 
-//enum digit { '0'..'9' };//数字
-//enum outkind {
-// id, num, error, start
-//}; //输出单词的类别
-//int T[6][]
-
 int main() {
 	FILE* fp;
 	if ((fp=fopen("input.txt", "r")) == NULL)
