@@ -1,19 +1,18 @@
-program sd
-type  i=integer;
-      sarray=array [0..5] of integer;
-var  i x;
-     sarray y;
-     integer ss;
-procedure sd(integer a);
-begin 
-   write(a)
-end    
+program _error
+var integer s;
+    integer t;
+procedure factor(intaeger n;var integer m);
+var integer w;
 begin
-  ss:=0;
-  while ss<6 do
-    y[ss]:=ss;
-    x:=y[ss];
-    sd(x);
-    ss:=ss+1
-  endwh
+if n=0
+then m:=1
+else 
+  factor(n-1,w);
+  m:=n*w
+fi
+end
+begin
+read(s);
+factor(s,t);
+write(t)
 end. 
