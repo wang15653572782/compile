@@ -11,7 +11,6 @@
 #include<iomanip>
 using namespace std;
 typedef pair<int,pair<string, string>> PSS;//存储单个Token 
-vector<PSS> token;
 bool is_num(char ch) {
 	if (ch >= '0' && ch <= '9')return true;
 	return false;
@@ -54,7 +53,7 @@ bool  reservedLookup(string s) {
 	}
 	return false;
 };//查找保留字
-bool getTokenlist(FILE* fp)//取得当前行所有的token序列
+bool getTokenlist(FILE* fp,vector<PSS> &token)//取得当前行所有的token序列
 {	
 	char cp = fgetc(fp);
 	int line = 1;
@@ -184,7 +183,6 @@ bool getTokenlist(FILE* fp)//取得当前行所有的token序列
 		}
 	return true;
 }
-
 void printTokenlist(vector<PSS>& to) {
 	cout << setw(15) << "行数" << setw(15) << "词法信息" << setw(15) << "语义信息" << endl;
 	for (auto a = to.begin(); a != to.end(); a++) {
@@ -192,13 +190,14 @@ void printTokenlist(vector<PSS>& to) {
 	}
 }//显示词法分析的结果
 int main() {
+	vector<PSS> token;
 	FILE* fp;
 	if ((fp=fopen("input.txt", "r")) == NULL)
 	{
 		printf("文件打开失败\n");
 		exit(1);
 	}
-	bool flag = getTokenlist(fp);
+	bool flag = getTokenlist(fp,token);
 	fclose(fp);
 	if(flag==false){
 		cout << "词法分析失败，程序编写有错误，请重新编程" << endl;

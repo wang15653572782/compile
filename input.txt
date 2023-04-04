@@ -1,4 +1,4 @@
-program _error
+program error
 var integer s;
     integer t;
 procedure factor(intaeger n;var integer m);
