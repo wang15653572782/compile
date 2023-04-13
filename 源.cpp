@@ -68,6 +68,20 @@ bool getTokenlist(FILE* fp,vector<PSS> &token)//取得当前行所有的token序列
 
 			return false;
 		}
+		if (is_num(cp)) {//数字
+			string val;
+			//val.push_back(cp);
+			while (is_num(cp)) {
+				val.push_back(cp);
+				cp = fgetc(fp);
+
+			}
+			ungetc(cp, fp);
+			cp = val.back();
+			PSS ans = { line,{ "无符号整数",val } };
+			//printToken(ans);
+			token.push_back(ans);
+		}
 		if (is_letter(cp)) {//字母
 			string val;
 			while (is_letter(cp) || is_num(cp)) {
@@ -86,21 +100,6 @@ bool getTokenlist(FILE* fp,vector<PSS> &token)//取得当前行所有的token序列
 			//printToken(ans);
 			token.push_back(ans);
 			cp = val.back();
-		}
-
-		if (is_num(cp)) {//数字
-			string val;
-			//val.push_back(cp);
-			while (is_num(cp)) {
-				val.push_back(cp);
-				cp = fgetc(fp);
-				
-			}
-			ungetc(cp, fp);
-			cp = val.back();
-			PSS ans = { line,{ "无符号整数",val } };
-			//printToken(ans);
-			token.push_back(ans);
 		}
 			if (is_delimiter(cp)) {//分界符
 				string tmp;
@@ -125,8 +124,6 @@ bool getTokenlist(FILE* fp,vector<PSS> &token)//取得当前行所有的token序列
 					cout << line <<":错误,你是不是忘写了个等号呀，兄弟"<< endl;
 					return false;
 				}
-
-
 			}
 			if (cp == '{') {//注释
 				cp = fgetc(fp);
